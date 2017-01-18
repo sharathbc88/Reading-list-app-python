@@ -33,21 +33,22 @@ class PhonebookApp(App):
         self.create_entry_buttons()
         return self.root
 
-    def required_books(self, phonebook):
+    def required_books(self, itemlist):
         print("Required books:")
         total = 0
         count = 0
         # store item list to a varaible
 
         # Display requiredbooks
-        for i in range(len(phonebook)):
-            if 'r' in phonebook[i][3]:
-                record = ' {}. {} by {} {} pages'.format(i, (phonebook[i][0]).ljust(40), (phonebook[i][1]).ljust(20),
-                                                         phonebook[i][2])
+        for i in range(len(itemlist)):
+            if 'r' in itemlist[i][3]:
+                record = ' {}. {} by {} {} pages'.format(i, (itemlist[i][0]).ljust(40), (itemlist[i][1]).ljust(20),
+                                                         itemlist[i][2])
                 print(record)
-                total = total + int(phonebook[i][2])
+                total = total + int(itemlist[i][2])
                 count = count + 1
         return self.itemlist
+
 
 
     def create_entry_buttons(self):
@@ -55,24 +56,15 @@ class PhonebookApp(App):
         Create the entry buttons and add them to the GUI
         :return: None
         """
-        for name in self.itemlist[1]:
+
+        for i in range(len(self.itemlist)):
+            name = self.itemlist[i][0]
             # create a button for each phonebook entry
             temp_button = Button(text=name)
-            temp_button.bind(on_release=self.press_entry)
+            #temp_button.bind(on_release=self.press_entry)
             # add the button to the "entriesBox" using add_widget()
             self.root.ids.entriesBox.add_widget(temp_button)
 
-    def press_entry(self, instance):
-        """
-        Handler for pressing entry buttons
-        :param instance: the Kivy button instance
-        :return: None
-        """
-        # update status text
-        name = instance.text
-        self.status_text = "{}'s number is {}".format(name, self.itemlist[name])
-        # set button state
-        # print(instance.state)
-        instance.state = 'down'
+
 
 PhonebookApp().run()
