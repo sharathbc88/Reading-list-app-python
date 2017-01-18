@@ -34,7 +34,10 @@ class booklist(App):
         return self.itemlist
 
     # display R - List required books
-    def required_books(itemlist):
+    def handle_calculate(self):
+        pass
+
+    def required_books(self,itemlist):
         print("Required books:")
         total = 0
         count = 0
@@ -48,6 +51,7 @@ class booklist(App):
                 print(record)
                 total = total + int(itemlist[i][2])
                 count = count + 1
+
         if count > 0:
             # if there is atleast 1 required book, then print
             print("Total pages for {} books: {}".format(count, total))
@@ -59,6 +63,6 @@ data = booklist()
 c = data.book()
 print(c)
 
-
+data.run()
 
 
