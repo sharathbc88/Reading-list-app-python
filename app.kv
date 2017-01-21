@@ -3,10 +3,11 @@ BoxLayout:
     orientation: 'horizontal'
     BoxLayout:
         orientation: 'vertical'
-        font_size: 24
+        size_hint_x: .4
+        font_size: 12
         Button:
             text: 'List Required'
-            on_press: app.handle_calculate()
+            on_press: app.required_books()
         Button:
             text: 'List Completed'
             on_press: app.handle_increment()
@@ -39,14 +40,18 @@ BoxLayout:
             on_press: app.handle_calculate()
     BoxLayout:
         orientation:'vertical'
+
         Label:
             text: 'Total Pages to read'
-    GridLayout:
-        id: entriesBox
-        cols: 1
-        orientation: 'vertical'
+        GridLayout:
+            id: entriesBox
+            size_hint_y: 3.6
+            cols: 1
+            orientation: 'vertical'
+        Label:
+            text: 'Click books to mark them as completed'
 
-    
+
 
 
 

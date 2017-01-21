@@ -11,9 +11,6 @@ class PhonebookApp(App):
     itemlist = []
     filename = "books.csv"
     def __init__(self, **kwargs):
-        """
-        Construct main app
-        """
         super(PhonebookApp, self).__init__(**kwargs)
         # basic data example - dictionary of names: phone numbers
         with open(self.filename, 'r') as f:  # open file
@@ -29,25 +26,26 @@ class PhonebookApp(App):
         :return: reference to the root Kivy widget
         """
         self.title = "Phonebook Demo - Popup & Buttons"
-        self.root = Builder.load_file('trail1.kv')
+        self.root = Builder.load_file('app.kv')
         self.create_entry_buttons()
         return self.root
 
-    def required_books(self, itemlist):
+    def required_books(self):
         print("Required books:")
         total = 0
         count = 0
         # store item list to a varaible
 
         # Display requiredbooks
-        for i in range(len(itemlist)):
-            if 'r' in itemlist[i][3]:
-                record = ' {}. {} by {} {} pages'.format(i, (itemlist[i][0]).ljust(40), (itemlist[i][1]).ljust(20),
-                                                         itemlist[i][2])
+        for i in range(len(self.itemlist)):
+            if 'r' in self.itemlist[i][3]:
+                record = ' {}. {} by {} {} pages'.format(i, (self.itemlist[i][0]).ljust(40), (self.itemlist[i][1]).ljust(20),
+                                                         self.itemlist[i][2])
                 print(record)
-                total = total + int(itemlist[i][2])
+                total = total + int(self.itemlist[i][2])
                 count = count + 1
         return self.itemlist
+
 
 
 
@@ -66,5 +64,7 @@ class PhonebookApp(App):
             self.root.ids.entriesBox.add_widget(temp_button)
 
 
+    def handle_calculate(self):
+        pass
 
 PhonebookApp().run()
