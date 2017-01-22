@@ -19,10 +19,9 @@ import string
 class ReadingListApp(App):
     top_status_text = StringProperty()
     bottom_status_text = StringProperty()
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.book_list = Booklist
+        self.book_list = Booklist()
         self.book_list.load_books(BOOK_FILE)
 
     def on_start(self):

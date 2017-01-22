@@ -21,7 +21,7 @@ class Booklist:
         file_pointer = open(file_name, 'r')
         for index, data in enumerate(file_pointer.readlines()):
             datum= data.strip().split(',')
-            self.books.append(Book(datum[0],datum[1],int[datum[2]],datum[3]))
+            self.books.append((datum[0],datum[1],int[datum[2]],datum[3]))
         file_pointer.close()
 
     def get_book(self,title=''):
