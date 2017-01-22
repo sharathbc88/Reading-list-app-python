@@ -1,107 +1,102 @@
-"""
-Name:
-Date:
-Brief Project Description:
-GitHub URL:
-"""
-
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.button import Button
 from kivy.properties import StringProperty
-from book import Book
 from booklist import Booklist
-BOOK_FILE = 'books.csv'
-import string
-# Create your main program in this file, using the ReadingListApp class
+from kivy.uix.togglebutton import ToggleButton
+from book import Book
 
-
-class ReadingListApp(App):
-    top_status_text = StringProperty()
+FILENAME = 'books.csv'
+class PhonebookApp(App):
     bottom_status_text = StringProperty()
+    itemlist = []
+    filename = "books.csv"
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        # basic data example - dictionary of names: phone numbers
         self.book_list = Booklist()
-        self.book_list.load_books(BOOK_FILE)
-
-    def on_start(self):
-        print('on start is called')
+        self.book_list.load_csv(FILENAME)
 
     def build(self):
-        """ build the Kivy app from the kv file """
-        self.title = "Reading List 2.0"
-        self.root = Builder.load_file('app.kv')
-        self.press_List_Required()
+        """
+        Build the Kivy GUI
+        :return: reference to the root Kivy widget
+        """
+        self.title = "Phonebook Demo - Popup & Buttons"
+        self.root = Builder.load_file('trail.kv')
+        self.required_books()
         return self.root
 
+    def required_books(self):
+        x = self.book_list.books[0] # import from booklist caused nested lists, hence broken down
+        temp = []
+        for i in range(len(x)):
+            if 'r' in x[i][3]:
+                temp.append(x[i])
+        self.itemlist = temp
+        print(self.itemlist)
+        self.create_entry_buttons()
+
+    def add_item(self,bookTitle, bookAuthor, bookPages):
+        try:
+
+            if str(bookTitle) == '' or str(bookAuthor) == '' or int(bookPages) == '':
+                self.bottom_status_text = 'All fields must be completed'
+            elif bookPages.isalpha():
+                self.bottom_status_text = 'Please enter a valid number'
+            elif int(bookPages) <0:
+                self.bottom_status_text = 'Number must be >= 0'
+            else:
+                new_Item = Book(bookTitle, bookAuthor, int(bookPages), 'r')  # create a Book object
+                self.book_list.add_book(new_Item)  # add the Book object to the book_list attribute
+                # save book file when a new book is added
+                self.book_list.add_book('books.csv')
+                # add button for new entry by clearing the book buttons and update
+                self.press_list_required()
+        except:
+            pass
+
+
+    def completed_books(self):
+        #self.load_csv()
+        x = self.book_list.books[0]  # import from booklist caused nested lists, hence broken down
+        temp = []
+        for i in range(len(x)):
+            if 'c' in x[i][3]:
+                temp.append(x[i])
+        self.itemlist = temp
+        print(self.itemlist)
+        self.create_entry_buttons()
 
     def create_entry_buttons(self):
-        for name in self.itemlist:
+        """
+        Create the entry buttons and add them to the GUI
+        :return: None
+        """
+        self.root.ids.entriesBox.clear_widgets()
+        for status in self.itemlist:
+
             # create a button for each phonebook entry
-            temp_button = Button(text=name)
-            temp_button.bind(on_release=self.press_entry)
+            temp_button = Button(text=str(status[0]))
+            #print(name)
+            temp_button.bind(on_release=self.create_entry_buttons)
             # add the button to the "entriesBox" using add_widget()
             self.root.ids.entriesBox.add_widget(temp_button)
 
-    def press_List_Required(self):
-       for book in self.book_list.books:
-           if book.status == 'required':
-               temp_button = Button(text=Book.title)
-               temp_button.bind(on_release=self.handle_required_entry)
-               self.root.ids.entriesBox.add_widget(temp_button)
-
-    def press_list_completed(self):
-        for book in self.book_list.books:
-            if book.status == 'c':
-                temp_button = Button(text=Book.title)
-                temp_button.bind(on_release=self.handle_completed_entry)
-                self.root.ids.entriesBox.add_widget(temp_button)
-
-    def handle_required_entry(self, instance):
-        title = instance.text
-        marked_book = self.book_list.get_book(title)
-        marked_book.mark_completed()
-        self.book_list.save_books('books.csv')
-
-        self.root.ids.entriesBox.remove_widget(widget=instance)
-
-    def handle_completed_entry(self,instance):
-        title= instance.text
-        complete_string = 'completed'
-        selected_book = self.book_list.get_book(title)
-
-
-    def clear_fields(self):
-        self.root.ids.addedTitle.text = ''
-        self.root.ids.addedAuthor.text = ''
-        self.root.ids.addedpages = ''
-
-    def press_add_item(self, added_title,added_author,added_pages):
-        try:
-            not_letter_count = 0
-            for i in str(added_author):
-                if i not in string.ascii_letters and i != '':
-                    not_letter_count += 1
-            if added_title == '' or added_author == '' or added_pages == '':
-                self.bottom_status = 'Author name should contain letter only'
-            elif not_letter_count >0:
-                self.bottom_status_text = 'Author name should contain letter only'
-            elif int(added_pages) <0:
-                self.bottom_status_text = 'number of pages must be >= 0'
-            else:
-                new_book = Book(added_title, added_author, added_pages, 'r')
-                self.book_list.save_books('books.csv')
-                self.press_List_Required()
-                self.clear_fields()
-        except ValueError:
-            self.bottom_status_text = ' please enter a valid number'
-
-    def on_stop(self):
-        print('calling on stop')
-        self.book_list.save_books('books.csv')
+    def press_entry(self, instance):
+        """
+        Handler for pressing entry buttons
+        :param instance: the Kivy button instance
+        :return: None
+        """
+        # update status text
+        name = instance.text
+        self.status_text = "{}'s number is {}".format(name, self.phonebook[name])
+        # set button state
+        # print(instance.state)
+        instance.state = 'down'
 
     def handle_calculate(self):
         pass
 
-
-ReadingListApp().run()
+PhonebookApp().run()
