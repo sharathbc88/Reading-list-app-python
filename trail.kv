@@ -40,12 +40,14 @@ BoxLayout:
         Button:
             text: 'Clear'
             on_press: app.clear_fields()
-    GridLayout:
-        id: entriesBox
-        size_hint_y: 1
-        cols: 1
+    BoxLayout:
         orientation: 'vertical'
-    Label:
-        id: bottomStatusLabel
-        size_hint_y: 0.1
-        text: app.bottom_status_text
+        GridLayout:
+            id: entriesBox
+            size_hint_y: 1
+            cols: 1
+            orientation: 'vertical'
+        Label:
+            id: bottomStatusLabel
+            size_hint_y: .2
+            text: app.bottom_status_text

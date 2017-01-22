@@ -8,7 +8,7 @@ from book import Book
 
 FILENAME = 'books.csv'
 class PhonebookApp(App):
-    status_text = StringProperty()
+    bottom_status_text = StringProperty()
     itemlist = []
     filename = "books.csv"
     def __init__(self, **kwargs):
@@ -40,7 +40,7 @@ class PhonebookApp(App):
     def add_item(self,bookTitle, bookAuthor, bookPages):
         try:
 
-            if str(bookTitle) or str(bookAuthor) or str(bookPages) == '':
+            if str(bookTitle) == '' or str(bookAuthor) == '' or int(bookPages) == '':
                 self.bottom_status_text = 'All fields must be completed'
             elif bookPages.isalpha():
                 self.bottom_status_text = 'Please enter a valid number'
@@ -50,7 +50,11 @@ class PhonebookApp(App):
                 new_Item = Book(bookTitle, bookAuthor, int(bookPages), 'r')  # create a Book object
                 self.book_list.add_book(new_Item)  # add the Book object to the book_list attribute
                 # save book file when a new book is added
-
+                self.book_list.add_book('books.csv')
+                # add button for new entry by clearing the book buttons and update
+                self.press_list_required()
+        except:
+            pass
 
 
     def completed_books(self):
