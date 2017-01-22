@@ -25,4 +25,5 @@ class Booklist:
         print(itemlist)
         self.books.append(itemlist)
 
-
+    def add_book(self,newBook):
+        self.books.append(newBook)

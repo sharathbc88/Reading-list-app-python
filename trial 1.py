@@ -3,6 +3,7 @@ from kivy.lang import Builder
 from kivy.uix.button import Button
 from kivy.properties import StringProperty
 from booklist import Booklist
+from kivy.uix.togglebutton import ToggleButton
 from book import Book
 
 FILENAME = 'books.csv'
@@ -36,26 +37,45 @@ class PhonebookApp(App):
         print(self.itemlist)
         self.create_entry_buttons()
 
+    def add_item(self,bookTitle, bookAuthor, bookPages):
+        try:
+
+            if str(bookTitle) or str(bookAuthor) or str(bookPages) == '':
+                self.bottom_status_text = 'All fields must be completed'
+            elif bookPages.isalpha():
+                self.bottom_status_text = 'Please enter a valid number'
+            elif int(bookPages) <0:
+                self.bottom_status_text = 'Number must be >= 0'
+            else:
+                new_Item = Book(bookTitle, bookAuthor, int(bookPages), 'r')  # create a Book object
+                self.book_list.add_book(new_Item)  # add the Book object to the book_list attribute
+                # save book file when a new book is added
+
+
 
     def completed_books(self):
         #self.load_csv()
+        x = self.book_list.books[0]  # import from booklist caused nested lists, hence broken down
         temp = []
-        for i in range(len(self.book_list.books)):
-            if 'c' in self.book_list.books[i][3]:
-                temp.append(self.book_list.books[i])
+        for i in range(len(x)):
+            if 'c' in x[i][3]:
+                temp.append(x[i])
         self.itemlist = temp
+        print(self.itemlist)
+        self.create_entry_buttons()
 
     def create_entry_buttons(self):
         """
         Create the entry buttons and add them to the GUI
         :return: None
         """
-        for name in self.itemlist:
+        self.root.ids.entriesBox.clear_widgets()
+        for status in self.itemlist:
 
             # create a button for each phonebook entry
-            temp_button = Button(text=str(name[0]))
+            temp_button = Button(text=str(status[0]))
             #print(name)
-            #temp_button.bind(on_release=self.press_entry)
+            temp_button.bind(on_release=self.create_entry_buttons)
             # add the button to the "entriesBox" using add_widget()
             self.root.ids.entriesBox.add_widget(temp_button)
 
