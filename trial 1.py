@@ -2,7 +2,10 @@ from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.button import Button
 from kivy.properties import StringProperty
+from booklist import Booklist
+from book import Book
 
+FILENAME = 'books.csv'
 class PhonebookApp(App):
     status_text = StringProperty()
     itemlist = []
@@ -10,16 +13,8 @@ class PhonebookApp(App):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         # basic data example - dictionary of names: phone numbers
-        self.completed_books()
-
-    def load_csv(self):
-        with open(self.filename, 'r') as f:
-            # open file
-            for line in f:
-                fields = line.rstrip('\n').split(',')
-                self.itemlist.append([fields[0], fields[1], fields[2], fields[3]])
-        import operator
-        self.itemlist = sorted(self.itemlist, key=operator.itemgetter(1, 2))
+        self.book_list = Booklist()
+        self.book_list.load_csv(FILENAME)
 
     def build(self):
         """
@@ -28,23 +23,24 @@ class PhonebookApp(App):
         """
         self.title = "Phonebook Demo - Popup & Buttons"
         self.root = Builder.load_file('trail.kv')
-        self.create_entry_buttons()
+        self.required_books()
         return self.root
 
     def required_books(self):
-        self.load_csv()
+        x = self.book_list.books[0]
         temp = []
-        for i in range(len(self.itemlist)):
-            if 'r' in self.itemlist[i][3]:
-                temp.append(self.itemlist[i])
+        for i in range(len(x)):
+            if 'r' in x[i][3]:
+                temp.append(x[i])
         self.itemlist = temp
 
+
     def completed_books(self):
-        self.load_csv()
+        #self.load_csv()
         temp = []
-        for i in range(len(self.itemlist)):
-            if 'c' in self.itemlist[i][3]:
-                temp.append(self.itemlist[i])
+        for i in range(len(self.book_list.books)):
+            if 'c' in self.book_list.books[i][3]:
+                temp.append(self.book_list.books[i])
         self.itemlist = temp
 
 
