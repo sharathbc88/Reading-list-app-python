@@ -27,12 +27,14 @@ class PhonebookApp(App):
         return self.root
 
     def required_books(self):
-        x = self.book_list.books[0]
+        x = self.book_list.books[0] # import from booklist caused nested lists, hence broken down
         temp = []
         for i in range(len(x)):
             if 'r' in x[i][3]:
                 temp.append(x[i])
         self.itemlist = temp
+        print(self.itemlist)
+        self.create_entry_buttons()
 
 
     def completed_books(self):
@@ -43,18 +45,17 @@ class PhonebookApp(App):
                 temp.append(self.book_list.books[i])
         self.itemlist = temp
 
-
-
-
     def create_entry_buttons(self):
         """
         Create the entry buttons and add them to the GUI
         :return: None
         """
         for name in self.itemlist:
+
             # create a button for each phonebook entry
             temp_button = Button(text=str(name[0]))
-            temp_button.bind(on_release=self.press_entry)
+            #print(name)
+            #temp_button.bind(on_release=self.press_entry)
             # add the button to the "entriesBox" using add_widget()
             self.root.ids.entriesBox.add_widget(temp_button)
 
