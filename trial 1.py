@@ -28,7 +28,7 @@ class PhonebookApp(App):
         return self.root
 
     def required_books(self):
-        
+
         x = self.book_list.books[0] # import from booklist caused nested lists, hence broken down
         temp = []
         for i in range(len(x)):
@@ -51,7 +51,8 @@ class PhonebookApp(App):
                 self.book_list.add_book(new_Item)
                 itemlist = self.book_list.books
                 self.book_list.save_csv(FILENAME, itemlist)
-                self.list_required()
+
+                self.required_books()
         except:
             pass
 
@@ -77,7 +78,7 @@ class PhonebookApp(App):
 
             # create a button for each phonebook entry
             temp_button = Button(text=str(status[0]))
-            #print(name)
+            print('xyz {}'.format(status[0]))
             temp_button.bind(on_release=self.create_entry_buttons)
             # add the button to the "entriesBox" using add_widget()
             self.root.ids.entriesBox.add_widget(temp_button)

@@ -30,7 +30,7 @@ class Booklist:
         self.books[0].append(newBook)
 
     def save_csv(self, filename='',itemlist=''):
-        print(itemlist)
+        itemlist= itemlist[0]
 
         try:
             with open(filename, 'w') as f:  # write file
