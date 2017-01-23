@@ -26,4 +26,19 @@ class Booklist:
         self.books.append(itemlist)
 
     def add_book(self,newBook):
-        self.books.append(newBook)
+        #self.books= (self.books[0]) #to break nested list
+        self.books[0].append(newBook)
+
+    def save_csv(self, filename='',itemlist=''):
+        print(itemlist)
+
+        try:
+            with open(filename, 'w') as f:  # write file
+                for i in range(len(itemlist)):
+                    line = '{},{},{},{}\n'.format(itemlist[i][0], itemlist[i][1], itemlist[i][2], itemlist[i][3])
+                    f.write(line)
+        except FileNotFoundError:  # error handling
+            print('Error occurred while saving details back to {} file.\n'.format(filename))
+
+
+
