@@ -38,8 +38,8 @@ class PhonebookApp(App):
                 temp.append(x[i])
                 total = total + int(x[i][2])
         self.itemlist = temp
-        self.top_status_text = ('Total pages completed: {}'.format(total))
-        self.create_entry_buttons()
+        self.top_status_text = ('Total pages required: {}'.format(total))
+        self.required_entry_buttons()
 
     def add_item(self,bookTitle, bookAuthor, bookPages):
         print(bookPages,bookTitle,bookAuthor)
@@ -79,9 +79,9 @@ class PhonebookApp(App):
                 total = total + int(x[i][2])
         self.itemlist = temp
         self.top_status_text = ('Total pages completed: {}'.format(total))
-        self.create_entry_buttons()
+        self.completed_entry_buttons()
 
-    def create_entry_buttons(self):
+    def required_entry_buttons(self):
         """
         Create the entry buttons and add them to the GUI
         :return: None
@@ -91,9 +91,21 @@ class PhonebookApp(App):
 
             # create a button for each phonebook entry
             temp_button = Button(text=str(status[0]))
-            print('xyz {}'.format(status[0]))
+
             temp_button.bind(on_release=self.remove_buttons)
             temp_button.bind(on_release=self.mark_item)
+            self.root.ids.entriesBox.add_widget(temp_button)
+
+    def completed_entry_buttons(self):
+        """
+        Create the entry buttons and add them to the GUI
+        :return: None
+        """
+        self.root.ids.entriesBox.clear_widgets()
+        for status in self.itemlist:
+
+            # create a button for each phonebook entry
+            temp_button = Button(text=str(status[0]))
             self.root.ids.entriesBox.add_widget(temp_button)
 
     def remove_buttons(self, instance):
@@ -108,6 +120,7 @@ class PhonebookApp(App):
             if title in x[i][0]:
                 x[i][3] = 'c'
         self.book_list.save_csv(FILENAME, self.book_list.books)
+        self.required_books()
 
     def handle_calculate(self):
         pass

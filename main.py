@@ -9,6 +9,7 @@ from book import Book
 FILENAME = 'books.csv'
 class PhonebookApp(App):
     bottom_status_text = StringProperty()
+    top_status_text = StringProperty()
     itemlist = []
     filename = "books.csv"
     def __init__(self, **kwargs):
@@ -29,18 +30,22 @@ class PhonebookApp(App):
 
     def required_books(self):
 
+        self.bottom_status_text = 'Click books to mark them as completed'
         x = self.book_list.books[0] # import from booklist caused nested lists, hence broken down
         temp = []
+        total = 0
         for i in range(len(x)):
             if 'r' in x[i][3]:
                 temp.append(x[i])
+                total = total + int(x[i][2])
         self.itemlist = temp
-        self.create_entry_buttons()
+        self.top_status_text = ('Total pages to read: {}'.format(total))
+        self.required_entry_buttons()
 
     def add_item(self,bookTitle, bookAuthor, bookPages):
         print(bookPages,bookTitle,bookAuthor)
         try:
-            if str(bookTitle) == '' or str(bookAuthor) == '' or int(bookPages) == '':
+            if str(bookTitle) == '' or str(bookAuthor) == '' or (bookPages) == '':
                 self.bottom_status_text = 'All fields must be completed'
             elif bookPages.isalpha():
                 self.bottom_status_text = 'Please enter a valid number'
@@ -65,17 +70,19 @@ class PhonebookApp(App):
 
 
     def completed_books(self):
-        #self.load_csv()
+
         x = self.book_list.books[0]  # import from booklist caused nested lists, hence broken down
         temp = []
+        total = 0
         for i in range(len(x)):
             if 'c' in x[i][3]:
                 temp.append(x[i])
+                total = total + int(x[i][2])
         self.itemlist = temp
-        print(self.itemlist)
-        self.create_entry_buttons()
+        self.top_status_text = ('Total pages completed: {}'.format(total))
+        self.completed_entry_buttons()
 
-    def create_entry_buttons(self):
+    def required_entry_buttons(self):
         """
         Create the entry buttons and add them to the GUI
         :return: None
@@ -85,9 +92,21 @@ class PhonebookApp(App):
 
             # create a button for each phonebook entry
             temp_button = Button(text=str(status[0]))
-            print('xyz {}'.format(status[0]))
+
             temp_button.bind(on_release=self.remove_buttons)
             temp_button.bind(on_release=self.mark_item)
+            self.root.ids.entriesBox.add_widget(temp_button)
+
+    def completed_entry_buttons(self):
+        """
+        Create the entry buttons and add them to the GUI
+        :return: None
+        """
+        self.root.ids.entriesBox.clear_widgets()
+        for status in self.itemlist:
+
+            # create a button for each phonebook entry
+            temp_button = Button(text=str(status[0]))
             self.root.ids.entriesBox.add_widget(temp_button)
 
     def remove_buttons(self, instance):
@@ -101,7 +120,8 @@ class PhonebookApp(App):
         for i in range(len(x)):
             if title in x[i][0]:
                 x[i][3] = 'c'
-
+        self.book_list.save_csv(FILENAME, self.book_list.books)
+        self.required_books()
 
     def handle_calculate(self):
         pass
