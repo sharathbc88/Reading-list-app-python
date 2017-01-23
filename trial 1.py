@@ -53,8 +53,14 @@ class PhonebookApp(App):
                 self.book_list.save_csv(FILENAME, itemlist)
 
                 self.required_books()
+                self.clear_text()
         except:
             pass
+
+    def clear_text(self):
+        self.root.ids.inputTitle.text = ''
+        self.root.ids.inputAuthor.text = ''
+        self.root.ids.inputPages.text = ''
 
 
     def completed_books(self):

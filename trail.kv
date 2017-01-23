@@ -8,7 +8,6 @@ BoxLayout:
         Button:
             text: 'List Required'
             on_press: app.required_books()
-            state: 'down'
             on_release: 'normal'
         Button:
             text: 'List Completed'
@@ -39,7 +38,7 @@ BoxLayout:
             on_release: app.add_item(inputTitle.text,inputAuthor.text,inputPages.text)
         Button:
             text: 'Clear'
-            on_press: app.clear_fields()
+            on_press: app.clear_text()
     BoxLayout:
         orientation: 'vertical'
         GridLayout:
