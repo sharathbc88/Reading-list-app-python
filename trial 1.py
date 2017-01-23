@@ -29,7 +29,8 @@ class PhonebookApp(App):
         return self.root
 
     def required_books(self):
-        self.top_status_text = ' required'
+
+        self.bottom_status_text = 'Click books to mark them as completed'
         x = self.book_list.books[0] # import from booklist caused nested lists, hence broken down
         temp = []
         total = 0
@@ -38,13 +39,13 @@ class PhonebookApp(App):
                 temp.append(x[i])
                 total = total + int(x[i][2])
         self.itemlist = temp
-        self.top_status_text = ('Total pages required: {}'.format(total))
+        self.top_status_text = ('Total pages to read: {}'.format(total))
         self.required_entry_buttons()
 
     def add_item(self,bookTitle, bookAuthor, bookPages):
         print(bookPages,bookTitle,bookAuthor)
         try:
-            if str(bookTitle) == '' or str(bookAuthor) == '' or int(bookPages) == '':
+            if str(bookTitle) == '' or str(bookAuthor) == '' or (bookPages) == '':
                 self.bottom_status_text = 'All fields must be completed'
             elif bookPages.isalpha():
                 self.bottom_status_text = 'Please enter a valid number'
@@ -81,6 +82,8 @@ class PhonebookApp(App):
         self.top_status_text = ('Total pages completed: {}'.format(total))
         self.completed_entry_buttons()
 
+
+
     def required_entry_buttons(self):
         """
         Create the entry buttons and add them to the GUI
@@ -106,7 +109,17 @@ class PhonebookApp(App):
 
             # create a button for each phonebook entry
             temp_button = Button(text=str(status[0]))
+            temp_button.bind(on_release=self.item_details)
             self.root.ids.entriesBox.add_widget(temp_button)
+
+    def item_details(self, instance):
+        title = instance.text
+        x = self.book_list.books[0]  # import from booklist caused nested lists, hence broken down
+        temp = []
+        total = 0
+        for i in range(len(x)):
+            if title in x[i][0]:
+                self.bottom_status_text = ('{} by {}, {}pages(completed)'.format(x[i][0],x[i][1], x[i][2]))
 
     def remove_buttons(self, instance):
         self.root.ids.entriesBox.remove_widget(widget=instance)
