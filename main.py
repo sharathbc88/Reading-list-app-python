@@ -28,18 +28,18 @@ class PhonebookApp(App):
         return self.root
 
     def required_books(self):
+
         x = self.book_list.books[0] # import from booklist caused nested lists, hence broken down
         temp = []
         for i in range(len(x)):
             if 'r' in x[i][3]:
                 temp.append(x[i])
         self.itemlist = temp
-        print(self.itemlist)
         self.create_entry_buttons()
 
     def add_item(self,bookTitle, bookAuthor, bookPages):
+        print(bookPages,bookTitle,bookAuthor)
         try:
-
             if str(bookTitle) == '' or str(bookAuthor) == '' or int(bookPages) == '':
                 self.bottom_status_text = 'All fields must be completed'
             elif bookPages.isalpha():
@@ -47,14 +47,21 @@ class PhonebookApp(App):
             elif int(bookPages) <0:
                 self.bottom_status_text = 'Number must be >= 0'
             else:
-                new_Item = Book(bookTitle, bookAuthor, int(bookPages), 'r')  # create a Book object
-                self.book_list.add_book(new_Item)  # add the Book object to the book_list attribute
-                # save book file when a new book is added
-                self.book_list.add_book('books.csv')
-                # add button for new entry by clearing the book buttons and update
-                self.press_list_required()
+                new_Item = [bookTitle, bookAuthor, int(bookPages), 'r']
+                self.book_list.add_book(new_Item)
+                itemlist = self.book_list.books
+                self.book_list.save_csv(FILENAME, itemlist)
+
+                self.required_books()
+                self.clear_text()
         except:
             pass
+
+    def clear_text(self):
+        self.root.ids.inputTitle.text = ''
+        self.root.ids.inputAuthor.text = ''
+        self.root.ids.inputPages.text = ''
+
 
 
     def completed_books(self):
@@ -78,23 +85,22 @@ class PhonebookApp(App):
 
             # create a button for each phonebook entry
             temp_button = Button(text=str(status[0]))
-            #print(name)
-            temp_button.bind(on_release=self.create_entry_buttons)
-            # add the button to the "entriesBox" using add_widget()
+            print('xyz {}'.format(status[0]))
+            temp_button.bind(on_release=self.remove_buttons)
+            temp_button.bind(on_release=self.mark_item)
             self.root.ids.entriesBox.add_widget(temp_button)
 
-    def press_entry(self, instance):
-        """
-        Handler for pressing entry buttons
-        :param instance: the Kivy button instance
-        :return: None
-        """
-        # update status text
-        name = instance.text
-        self.status_text = "{}'s number is {}".format(name, self.phonebook[name])
-        # set button state
-        # print(instance.state)
-        instance.state = 'down'
+    def remove_buttons(self, instance):
+        self.root.ids.entriesBox.remove_widget(widget=instance)
+
+
+
+    def mark_item(self, instance):
+        title = instance.text
+        x = self.book_list.books[0]  # import from booklist caused nested lists, hence broken down
+        for i in range(len(x)):
+            if title in x[i][0]:
+                x[i][3] = 'c'
 
     def handle_calculate(self):
         pass
