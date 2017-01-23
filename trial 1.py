@@ -32,10 +32,13 @@ class PhonebookApp(App):
         self.top_status_text = ' required'
         x = self.book_list.books[0] # import from booklist caused nested lists, hence broken down
         temp = []
+        total = 0
         for i in range(len(x)):
             if 'r' in x[i][3]:
                 temp.append(x[i])
+                total = total + int(x[i][2])
         self.itemlist = temp
+        self.top_status_text = ('Total pages completed: {}'.format(total))
         self.create_entry_buttons()
 
     def add_item(self,bookTitle, bookAuthor, bookPages):
@@ -66,14 +69,16 @@ class PhonebookApp(App):
 
 
     def completed_books(self):
-        self.top_status_text = ' completed'
+
         x = self.book_list.books[0]  # import from booklist caused nested lists, hence broken down
         temp = []
+        total = 0
         for i in range(len(x)):
             if 'c' in x[i][3]:
                 temp.append(x[i])
+                total = total + int(x[i][2])
         self.itemlist = temp
-        print(self.itemlist)
+        self.top_status_text = ('Total pages completed: {}'.format(total))
         self.create_entry_buttons()
 
     def create_entry_buttons(self):
