@@ -9,6 +9,7 @@ from book import Book
 FILENAME = 'books.csv'
 class PhonebookApp(App):
     bottom_status_text = StringProperty()
+    top_status_text = StringProperty()
     itemlist = []
     filename = "books.csv"
     def __init__(self, **kwargs):
@@ -28,7 +29,7 @@ class PhonebookApp(App):
         return self.root
 
     def required_books(self):
-
+        self.top_status_text = ' required'
         x = self.book_list.books[0] # import from booklist caused nested lists, hence broken down
         temp = []
         for i in range(len(x)):
@@ -65,7 +66,7 @@ class PhonebookApp(App):
 
 
     def completed_books(self):
-        #self.load_csv()
+        self.top_status_text = ' completed'
         x = self.book_list.books[0]  # import from booklist caused nested lists, hence broken down
         temp = []
         for i in range(len(x)):
@@ -101,6 +102,7 @@ class PhonebookApp(App):
         for i in range(len(x)):
             if title in x[i][0]:
                 x[i][3] = 'c'
+        self.book_list.save_csv(FILENAME, self.book_list.books)
 
     def handle_calculate(self):
         pass

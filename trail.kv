@@ -47,6 +47,10 @@ BoxLayout:
             on_press: app.clear_text()
     BoxLayout:
         orientation: 'vertical'
+        Label:
+            id: bottomStatusLabel
+            size_hint_y: .2
+            text: app.top_status_text
         GridLayout:
             id: entriesBox
             size_hint_y: 1

@@ -102,6 +102,7 @@ class PhonebookApp(App):
             if title in x[i][0]:
                 x[i][3] = 'c'
 
+
     def handle_calculate(self):
         pass
 
