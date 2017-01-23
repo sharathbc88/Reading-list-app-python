@@ -63,6 +63,7 @@ class PhonebookApp(App):
         self.root.ids.inputPages.text = ''
 
 
+
     def completed_books(self):
         #self.load_csv()
         x = self.book_list.books[0]  # import from booklist caused nested lists, hence broken down
@@ -85,22 +86,21 @@ class PhonebookApp(App):
             # create a button for each phonebook entry
             temp_button = Button(text=str(status[0]))
             print('xyz {}'.format(status[0]))
-            temp_button.bind(on_release=self.create_entry_buttons)
-            # add the button to the "entriesBox" using add_widget()
+            temp_button.bind(on_release=self.remove_buttons)
+            temp_button.bind(on_release=self.mark_item)
             self.root.ids.entriesBox.add_widget(temp_button)
 
-    def press_entry(self, instance):
-        """
-        Handler for pressing entry buttons
-        :param instance: the Kivy button instance
-        :return: None
-        """
-        # update status text
-        name = instance.text
-        self.status_text = "{}'s number is {}".format(name, self.phonebook[name])
-        # set button state
-        # print(instance.state)
-        instance.state = 'down'
+    def remove_buttons(self, instance):
+        self.root.ids.entriesBox.remove_widget(widget=instance)
+
+
+
+    def mark_item(self, instance):
+        title = instance.text
+        x = self.book_list.books[0]  # import from booklist caused nested lists, hence broken down
+        for i in range(len(x)):
+            if title in x[i][0]:
+                x[i][3] = 'c'
 
     def handle_calculate(self):
         pass

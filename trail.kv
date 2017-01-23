@@ -21,18 +21,24 @@ BoxLayout:
             text: ''
             font_size:
             on_text: app.handle_calculate()
+            multiline: False
+            write_tab: False
         Label:
             text: 'Author'
         TextInput:
             id: inputAuthor
             text: ''
             on_text: app.handle_calculate()
+            multiline: False
+            write_tab: False
         Label:
             text: 'Pages'
         TextInput:
             id: inputPages
             text: ''
             on_text: app.handle_calculate()
+            multiline: False
+            write_tab: False
         Button:
             text: 'Add Item'
             on_release: app.add_item(inputTitle.text,inputAuthor.text,inputPages.text)
