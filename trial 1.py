@@ -95,6 +95,10 @@ class PhonebookApp(App):
             # create a button for each phonebook entry
             temp_button = Button(text=str(status[0]))
 
+            if int(status[2]) > 500:
+                temp_button.background_color = .4,1,1,1
+            else:
+                temp_button.background_color = .8,1,1,1
             temp_button.bind(on_release=self.remove_buttons)
             temp_button.bind(on_release=self.mark_item)
             self.root.ids.entriesBox.add_widget(temp_button)
@@ -110,13 +114,13 @@ class PhonebookApp(App):
             # create a button for each phonebook entry
             temp_button = Button(text=str(status[0]))
             temp_button.bind(on_release=self.item_details)
+
+            self.bottom_status_text = ''
             self.root.ids.entriesBox.add_widget(temp_button)
 
     def item_details(self, instance):
         title = instance.text
         x = self.book_list.books[0]  # import from booklist caused nested lists, hence broken down
-        temp = []
-        total = 0
         for i in range(len(x)):
             if title in x[i][0]:
                 self.bottom_status_text = ('{} by {}, {}pages(completed)'.format(x[i][0],x[i][1], x[i][2]))
