@@ -18,7 +18,7 @@ from kivy.lang import Builder
 from kivy.uix.button import Button
 from kivy.properties import StringProperty
 from booklist import Booklist
-from book import Book
+
 
 
 """ name of the CSV file stored in a constant """
@@ -33,8 +33,11 @@ class ReadingList(App):
     top_status_text = StringProperty()
 
 
-    # Initializing the class
+
     def __init__(self, **kwargs):
+        """
+            Initializing the class
+        """
         super().__init__(**kwargs)
         self.book_list = Booklist()
         self.book_list.load_csv(FILENAME)
@@ -44,8 +47,8 @@ class ReadingList(App):
         Builds Kivy Graphical User Interface
         :return: reference to the root Kivy widget
         """
-        self.title = "Phonebook Demo - Popup & Buttons"
-        self.root = Builder.load_file('trail.kv')
+        self.title = "{:>120}".format("Reading List 2.0")
+        self.root = Builder.load_file('app.kv')
         self.required_books()
         return self.root
 
