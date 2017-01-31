@@ -16,7 +16,7 @@
 from book import Book
 import operator
 
-class Booklist:
+class BookList:
     """
         class for BookList (in booklist.py). It contain a single attribute, a list of Book objects
     """

@@ -17,7 +17,8 @@ from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.button import Button
 from kivy.properties import StringProperty
-from booklist import Booklist
+from booklist import BookList
+from book import Book
 
 
 
@@ -39,7 +40,7 @@ class ReadingList(App):
             Initializing the class
         """
         super().__init__(**kwargs)
-        self.book_list = Booklist()
+        self.book_list = BookList()
         self.book_list.load_csv(FILENAME)
 
     def build(self):
@@ -93,7 +94,9 @@ class ReadingList(App):
              Reads the required book and pass it to buttons method
              Status widget gets the string message
         """
+        temp = Book()
         x = self.book_list.books[0]  # import from booklist caused nested lists, hence broken down
+
         temp = []
         total = 0
         for i in range(len(x)):
